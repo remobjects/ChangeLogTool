@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build" ToolsVersion="4.0">
+    <PropertyGroup>
+        <RootNamespace>ChangeLogTool</RootNamespace>
+        <ProjectGuid>2693C385-37AB-41CC-B6EF-E21DE42ACF63</ProjectGuid>
+        <OutputType>executable</OutputType>
+        <AssemblyName>ChangeLogTool</AssemblyName>
+        <AllowGlobals>False</AllowGlobals>
+        <AllowLegacyWith>False</AllowLegacyWith>
+        <AllowLegacyOutParams>False</AllowLegacyOutParams>
+        <AllowLegacyCreate>False</AllowLegacyCreate>
+        <AllowUnsafeCode>False</AllowUnsafeCode>
+        <Configuration Condition="'$(Configuration)' == ''">Release</Configuration>
+        <SDK>OS X</SDK>
+        <CreateAppBundle>True</CreateAppBundle>
+        <InfoPListFile>.\Resources\Info.plist</InfoPListFile>
+        <EntitlementsFile>Resources\Entitlements.entitlements</EntitlementsFile>
+        <MacIconFile>.\Resources\App.icns</MacIconFile>
+        <MinFrameworkVersionRequired>4.0</MinFrameworkVersionRequired>
+        <BundleIdentifier>com.dwarfland.changelogtool</BundleIdentifier>
+        <DefaultUses>AppKit;Foundation</DefaultUses>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+        <Optimize>false</Optimize>
+        <OutputPath>.\bin\Debug</OutputPath>
+        <DefineConstants>DEBUG;TRACE;</DefineConstants>
+        <GenerateDebugInfo>True</GenerateDebugInfo>
+        <EnableAsserts>True</EnableAsserts>
+        <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+        <CaptureConsoleOutput>False</CaptureConsoleOutput>
+        <WarnOnCaseMismatch>True</WarnOnCaseMismatch>
+        <CodesignCertificateName>Developer ID Application: RemObjects Software (24G43Y5373)</CodesignCertificateName>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+        <Optimize>true</Optimize>
+        <OutputPath>.\bin\Release</OutputPath>
+        <GenerateDebugInfo>False</GenerateDebugInfo>
+        <EnableAsserts>False</EnableAsserts>
+        <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+        <CaptureConsoleOutput>False</CaptureConsoleOutput>
+        <WarnOnCaseMismatch>True</WarnOnCaseMismatch>
+    </PropertyGroup>
+    <ItemGroup>
+        <Reference Include="Cocoa"/>
+        <Reference Include="rtl"/>
+        <Reference Include="libNougat"/>
+        <Reference Include="libSwift"/>
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="AppDelegate.swift"/>
+        <Compile Include="MainWindowController.swift"/>
+        <None Include="Resources\Entitlements.entitlements"/>
+    </ItemGroup>
+    <ItemGroup>
+        <Folder Include="Resources"/>
+    </ItemGroup>
+    <ItemGroup>
+        <Content Include="Resources\Info.plist"/>
+        <Content Include="Resources\App.icns"/>
+        <Xib Include="MainWindow.xib">
+            <DependentUpon>MainWindowController.swift</DependentUpon>
+        </Xib>
+        <Xib Include="Resources\MainMenu.xib"/>
+        <AppResource Include="Resources\14.png"/>
+        <AppResource Include="Resources\19.png"/>
+        <AppResource Include="Resources\46.png"/>
+        <AppResource Include="Resources\47.png"/>
+        <AppResource Include="Resources\48.png"/>
+        <Compile Include="TextView.swift"/>
+    </ItemGroup>
+    <Import Project="$(MSBuildExtensionsPath)\RemObjects Software\Elements\RemObjects.Elements.Nougat.targets"/>
+</Project>

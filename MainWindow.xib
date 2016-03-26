@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="10116"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="MainWindowController">
+            <connections>
+                <outlet property="textField" destination="LVW-KZ-oYe" id="TGA-25-OYR"/>
+                <outlet property="window" destination="5" id="13"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <window title="ChangeLogTool" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="5">
+            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
+            <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+            <rect key="contentRect" x="335" y="390" width="480" height="360"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
+            <view key="contentView" id="6">
+                <rect key="frame" x="0.0" y="0.0" width="480" height="360"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JSN-Hv-xId">
+                        <rect key="frame" x="-1" y="-1" width="482" height="362"/>
+                        <clipView key="contentView" id="O7Y-LH-lfc">
+                            <rect key="frame" x="1" y="1" width="480" height="360"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <subviews>
+                                <textView importsGraphics="NO" richText="NO" usesInspectorBar="YES" findStyle="bar" incrementalSearchingEnabled="YES" continuousSpellChecking="YES" allowsUndo="YES" verticallyResizable="YES" allowsNonContiguousLayout="YES" spellingCorrection="YES" smartInsertDelete="YES" id="LVW-KZ-oYe" customClass="TextView">
+                                    <rect key="frame" x="0.0" y="0.0" width="480" height="360"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <size key="minSize" width="480" height="360"/>
+                                    <size key="maxSize" width="492" height="10000000"/>
+                                    <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <size key="minSize" width="480" height="360"/>
+                                    <size key="maxSize" width="492" height="10000000"/>
+                                </textView>
+                            </subviews>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        </clipView>
+                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="CQC-a8-f06">
+                            <rect key="frame" x="-100" y="-100" width="87" height="18"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </scroller>
+                        <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="D99-NM-3Ha">
+                            <rect key="frame" x="465" y="1" width="16" height="360"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </scroller>
+                    </scrollView>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="JSN-Hv-xId" firstAttribute="top" secondItem="6" secondAttribute="top" constant="-1" id="0y8-jo-AJE"/>
+                    <constraint firstAttribute="trailing" secondItem="JSN-Hv-xId" secondAttribute="trailing" constant="-1" id="SEX-t7-mVs"/>
+                    <constraint firstAttribute="bottom" secondItem="JSN-Hv-xId" secondAttribute="bottom" constant="-1" id="Vg0-VP-0gH"/>
+                    <constraint firstItem="JSN-Hv-xId" firstAttribute="leading" secondItem="6" secondAttribute="leading" constant="-1" id="ci7-PA-Xl0"/>
+                </constraints>
+            </view>
+            <toolbar key="toolbar" implicitIdentifier="5FA0DD69-F47A-47C3-B91A-306901680F8C" autosavesConfiguration="NO" displayMode="iconAndLabel" sizeMode="regular" id="Jc4-rB-owR">
+                <allowedToolbarItems>
+                    <toolbarItem implicitItemIdentifier="NSToolbarSpaceItem" id="nFn-GM-IoJ"/>
+                    <toolbarItem implicitItemIdentifier="NSToolbarFlexibleSpaceItem" id="8us-bs-lUP"/>
+                    <toolbarItem implicitItemIdentifier="4EAF748D-A4BC-4714-A935-73C39192CE2F" label="Sort by ID" paletteLabel="Sort by ID" tag="-1" image="48" id="3cr-qL-XQp">
+                        <connections>
+                            <action selector="sortByID:" target="-2" id="CVO-tf-qqS"/>
+                        </connections>
+                    </toolbarItem>
+                    <toolbarItem implicitItemIdentifier="D712E111-C1E0-409E-86CE-8B3A7B5E7F2F" label="Sort by Text" paletteLabel="Sort by Text" tag="-1" image="47" id="Ffk-I1-caB">
+                        <connections>
+                            <action selector="sortByText:" target="-2" id="dKn-xb-hon"/>
+                        </connections>
+                    </toolbarItem>
+                    <toolbarItem implicitItemIdentifier="98B62B33-5570-4FEE-A770-C1600F04479C" label="Clean Up" paletteLabel="Clean Up" tag="-1" image="14" id="cOr-Ag-sRY">
+                        <connections>
+                            <action selector="cleanup:" target="-2" id="Lz3-zk-mNj"/>
+                        </connections>
+                    </toolbarItem>
+                    <toolbarItem implicitItemIdentifier="D50231DD-ED27-4D37-A35D-887A349E793F" label="To Markdown" paletteLabel="To Markdown" tag="-1" image="19" id="Nkl-n6-pkc">
+                        <connections>
+                            <action selector="gitToMarkdown:" target="-2" id="HGx-Z9-kTG"/>
+                        </connections>
+                    </toolbarItem>
+                </allowedToolbarItems>
+                <defaultToolbarItems>
+                    <toolbarItem reference="8us-bs-lUP"/>
+                    <toolbarItem reference="Nkl-n6-pkc"/>
+                    <toolbarItem reference="nFn-GM-IoJ"/>
+                    <toolbarItem reference="3cr-qL-XQp"/>
+                    <toolbarItem reference="Ffk-I1-caB"/>
+                    <toolbarItem reference="nFn-GM-IoJ"/>
+                    <toolbarItem reference="cOr-Ag-sRY"/>
+                    <toolbarItem reference="8us-bs-lUP"/>
+                </defaultToolbarItems>
+            </toolbar>
+            <connections>
+                <outlet property="delegate" destination="-2" id="14"/>
+            </connections>
+        </window>
+    </objects>
+    <resources>
+        <image name="14" width="128" height="128"/>
+        <image name="19" width="128" height="128"/>
+        <image name="47" width="128" height="128"/>
+        <image name="48" width="128" height="128"/>
+    </resources>
+</document>
