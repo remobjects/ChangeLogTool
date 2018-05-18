@@ -6,10 +6,10 @@ public protocol ITextViewDelegate {
 }
 
 public class TextView : NSTextView {
-	
+
 	var fileName: String?
 
-	private func draggingEntered(sender: INSDraggingInfo) -> NSDragOperation {
+	private func draggingEntered(_ sender: INSDraggingInfo) -> NSDragOperation {
 		var pb = sender.draggingPasteboard
 		var dragOperation: NSDragOperation! = sender.draggingSourceOperationMask()
 		if pb.types?.containsObject(NSFilenamesPboardType) {
@@ -24,8 +24,8 @@ public class TextView : NSTextView {
 		}
 		return .None
 	}
-	
-	private func performDragOperation(sender: INSDraggingInfo) -> Bool {
+
+	private func performDragOperation(_ sender: INSDraggingInfo) -> Bool {
 		var pb = sender.draggingPasteboard()
 		if pb.types?.containsObject(NSFilenamesPboardType) {
 			var filenames: NSArray! = pb.propertyListForType(NSFilenamesPboardType)
@@ -44,8 +44,8 @@ public class TextView : NSTextView {
 		}
 		return true
 	}
-	
-	func tryLoadFile(fileName: String) {
+
+	func tryLoadFile(_ fileName: String) {
 		var error: NSError? = nil
 		var fileContents = NSString.stringWithContentsOfFile(fileName, encoding: .UTF8StringEncoding, error: &error)
 		if let error = error {

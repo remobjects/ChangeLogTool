@@ -17,12 +17,12 @@
 		// window has been loaded from its nib file.
 		textField.delegate = self
 		updatetextView()
-		
+
 		if let lastFile = NSUserDefaults.standardUserDefaults.stringForKey(KEY_LAST_OPEN_FILE) {
 			textField.tryLoadFile(lastFile)
 		}
 	}
-	
+
 	private func updatetextView()
 	{
 		textField.font = NSFont.fontWithName("Menlo",size:13);
@@ -35,22 +35,22 @@
 		fieldEditor.setNeedsDisplay(true)
 		fieldEditor.backgroundColor = codeField.backgroundColor*/
 	}
-	
+
 	@IBOutlet var textField: TextView
-	
+
 	let KEY_LAST_OPEN_FILE = "LastOpenFile"
-	
+
 	func textView(_ textView: TextView, loadedFile fileName: String) {
 		window?.title = "Change Log Tool — \(fileName.lastPathComponent)"
 		NSUserDefaults.standardUserDefaults.setObject(fileName, forKey: KEY_LAST_OPEN_FILE)
 	}
-	
+
 	func textView(_ textView: TextView, gotNonFileText text: String) {
 		window?.title = "Change Log Tool"
 		NSUserDefaults.standardUserDefaults.setObject(nil, forKey: KEY_LAST_OPEN_FILE)
 	}
-	
-	func processLines(processor: (String) -> String) {
+
+	func processLines(_ processor: (String) -> String) {
 		let lines = textField.string?.componentsSeparatedByString("\n")
 		let newLines = NSMutableArray()
 		for l in lines {
@@ -60,12 +60,12 @@
 		}
 		textField.string = newLines.componentsJoinedByString("\n")
 	}
-	
-	func processLinesInBlocks(processor: (NSArray) -> NSArray) {
+
+	func processLinesInBlocks(_ processor: (NSArray) -> NSArray) {
 		if let lines = textField.string?.componentsSeparatedByString("\n") {
 			let newLines = NSMutableArray(capacity: lines.count)
 			let currentBlock = NSMutableArray(capacity: lines.count)
-		
+
 			let processCurrentBlock = {
 				if currentBlock.count > 0 {
 					let processedBlock = processor(currentBlock)
@@ -73,7 +73,7 @@
 					currentBlock.removeAllObjects()
 				}
 			}
-		
+
 			for l in lines {
 				let l2 = l.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet)
 				if !l2.hasPrefix("*") {
@@ -87,40 +87,40 @@
 			textField.string = newLines.componentsJoinedByString("\n")
 		}
 	}
-	
-	@IBAction func save(sender: AnyObject?) {
+
+	@IBAction func save(_ sender: AnyObject?) {
 		if let fileName = textField.fileName {
 			textField.string?.writeToFile(fileName, atomically: true, encoding: .UTF8StringEncoding, error: nil)
 		}
 	}
-	
 
-	@IBAction func gitToMarkdown(sender: AnyObject?) {
+
+	@IBAction func gitToMarkdown(_ sender: AnyObject?) {
 		processLines(convertGitLineToMarkdown)
 	}
-	
-	@IBAction func sortByID(sender: AnyObject?) {
+
+	@IBAction func sortByID(_ sender: AnyObject?) {
 		processLinesInBlocks() { lines in
 			return self.sortLinesByID(lines)
 		}
 	}
-	
-	@IBAction func sortByText(sender: AnyObject?) {
+
+	@IBAction func sortByText(_ sender: AnyObject?) {
 		processLinesInBlocks() { lines in
 			return self.sortLinesByText(lines)
 		}
 	}
-	
-	@IBAction func cleanup(sender: AnyObject?) {
+
+	@IBAction func cleanup(_ sender: AnyObject?) {
 		processLines() { line in
 
 			if line.length == 0 || line.hasPrefix("#") {
 				return line
 			}
-			
+
 			var issueID = 0
 			var l: String
-			/*let*/ (issueID, l) = self.getIssueIDAndRemainderFromLine(line)
+			(issueID, l) = self.getIssueIDAndRemainderFromLine(line)
 
 			l = l.stringByReplacingOccurrencesOfString("Hydrogene", withString: "C#", options: .CaseInsensitiveSearch, range: NSMakeRange(0, l.length))
 			l = l.stringByReplacingOccurrencesOfString("Silver", withString: "Swift", options: .CaseInsensitiveSearch, range: NSMakeRange(0, l.length))
@@ -140,12 +140,12 @@
 	//
 	// Processing
 	//
-	
-	func distinctArray(lines: NSArray) -> NSArray {
+
+	func distinctArray(_ lines: NSArray) -> NSArray {
 		return lines.valueForKeyPath("@distinctUnionOfObjects.self")!
 	}
-	
-	func sortLinesByID(lines: NSArray) -> NSArray {
+
+	func sortLinesByID(_ lines: NSArray) -> NSArray {
 		return distinctArray(lines).sortedArrayUsingComparator() { a, b in
 			let idA = self.getIssueIDFromLine(a)
 			let idB = self.getIssueIDFromLine(b)
@@ -160,8 +160,8 @@
 			}
 		}
 	}
-	
-	func sortLinesByText(lines: NSArray) -> NSArray {
+
+	func sortLinesByText(_ lines: NSArray) -> NSArray {
 		return distinctArray(lines).sortedArrayUsingComparator() { a, b in
 			let idA = self.getIssueIDFromLine(a)
 			let idB = self.getIssueIDFromLine(b)
@@ -174,27 +174,31 @@
 			} else {
 				return .OrderedAscending
 			}
-			
+
 		}
 	}
-	
-	private func stringStartsWithGitRev(string: NSString!) -> Bool {
-		if string.length() < 7 {
+
+	private func stringStartsWithGitRev(_ string: NSString!) -> Bool {
+		let len = length(string)
+		if len < 7 {
 			return false
 		}
-		for var i: Int32 = 0; i <= 7 - 1; i++ {
+		for var i: Int32 = 0; i < len; i++ {
 			var c: unichar = string.characterAtIndex(i)
+			if i > 0 && c == " " {
+				return true
+			}
 			if !(c >= "a" && c <= "f" || c >= "A" && c <= "F" || c >= "0" && c <= "9") {
 				return false
 			}
 		}
 		return true
 	}
-	
-	private func getIssueIDAndRemainderFromLine(line: String) -> (Int, String) {
+
+	private func getIssueIDAndRemainderFromLine(_ line: String) -> (Int, String) {
 		var issueID = 0
 		var l = line
-		
+
 		let extractIssueID = { (range: NSRange) in
 			var potentialIssueID: NSString! = l.substringToIndex(range.location)
 			issueID = abs(potentialIssueID.intValue())
@@ -202,7 +206,7 @@
 				l = l.substringFromIndex(range.location + 1).stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet)
 			}
 		}
-		
+
 		if l.hasPrefix("* ") {
 			l = l.substringFromIndex(2)
 		}
@@ -218,18 +222,18 @@
 		l = l.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet)
 		return (issueID, l)
 	}
-	
-	private func getIssueIDFromLine(line: String) -> Int {
+
+	private func getIssueIDFromLine(_ line: String) -> Int {
 		let (issueID, _) = getIssueIDAndRemainderFromLine(line)
 		return issueID
 	}
-	
-	private func getTextFromLine(line: String) -> String {
+
+	private func getTextFromLine(_ line: String) -> String {
 		let (_, text) = getIssueIDAndRemainderFromLine(line)
 		return text
 	}
-	
-	private func convertGitLineToMarkdown(line: String) -> String? {
+
+	private func convertGitLineToMarkdown(_ line: String) -> String? {
 
 		var l = line.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet)
 		if l.length() == 0 {
@@ -243,9 +247,9 @@
 		}
 		if stringStartsWithGitRev(l) {
 			var dash = l.rangeOfString(" - ")
-			if dash.location > 0 && dash.location <= 8 {
+			if dash.location > 0 && dash.location <= 16 {
 				l = l.substringFromIndex(dash.location + 3)
-				
+
 				var parens = l.rangeOfString("(", options: NSStringCompareOptions.BackwardsSearch)
 				if parens.location > 0 && parens.location < l.length() {
 					l = l.substringToIndex(parens.location)
@@ -259,13 +263,13 @@
 
 		var issueID = 0
 		(issueID, l) = getIssueIDAndRemainderFromLine(l)
-		  
+
 		if issueID == 0 {
 			if l.length() == 0 || l.hasPrefix("Merge ") || l.hasPrefix("Squashed ") {
 				return nil
 			}
 		}
-		
+
 		if issueID > 0 {
 			return "* \(issueID): \(l)"
 		} else {
