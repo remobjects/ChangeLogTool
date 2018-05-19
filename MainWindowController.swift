@@ -183,7 +183,7 @@
 		if len < 7 {
 			return false
 		}
-		for var i: Int32 = 0; i < len; i++ {
+		for i in 0 ..< len {
 			var c: unichar = string.characterAtIndex(i)
 			if i > 0 && c == " " {
 				return true
@@ -236,14 +236,8 @@
 	private func convertGitLineToMarkdown(_ line: String) -> String? {
 
 		var l = line.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet)
-		if l.length() == 0 {
-			return nil
-		}
-		if l.hasPrefix("# ") {
+		if l.length() == 0 || l.hasPrefix("#") || l.hasPrefix("*") {
 			return line
-		}
-		if l.hasPrefix("* ") {
-			l = l.substringFromIndex(2)
 		}
 		if stringStartsWithGitRev(l) {
 			var dash = l.rangeOfString(" - ")
