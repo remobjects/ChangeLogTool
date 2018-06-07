@@ -11,7 +11,7 @@
     <AllowLegacyCreate>False</AllowLegacyCreate>
     <AllowUnsafeCode>False</AllowUnsafeCode>
     <Configuration Condition="'$(Configuration)' == ''">Release</Configuration>
-    <SDK>OS X</SDK>
+    <SDK>macOS</SDK>
     <CreateAppBundle>True</CreateAppBundle>
     <InfoPListFile>.\Resources\Info.plist</InfoPListFile>
     <EntitlementsFile>Resources\Entitlements.entitlements</EntitlementsFile>
@@ -19,6 +19,7 @@
     <MinFrameworkVersionRequired>4.0</MinFrameworkVersionRequired>
     <BundleIdentifier>com.dwarfland.changelogtool</BundleIdentifier>
     <DefaultUses>AppKit;Foundation</DefaultUses>
+    <DeploymentTargetVersion>10.13</DeploymentTargetVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <Optimize>false</Optimize>
