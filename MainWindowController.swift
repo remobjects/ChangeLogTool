@@ -118,9 +118,7 @@
 				return line
 			}
 
-			var issueID = 0
-			var l: String
-			(issueID, l) = self.getIssueIDAndRemainderFromLine(line)
+			var (issueID, l) = self.getIssueIDAndRemainderFromLine(line)
 
 			l = l.stringByReplacingOccurrencesOfString("Hydrogene", withString: "C#", options: .CaseInsensitiveSearch, range: NSMakeRange(0, l.length))
 			l = l.stringByReplacingOccurrencesOfString("Silver", withString: "Swift", options: .CaseInsensitiveSearch, range: NSMakeRange(0, l.length))
@@ -129,7 +127,7 @@
 			l = l.stringByReplacingOccurrencesOfString("GoToDefinition", withString: "Go to Definition", options: .CaseInsensitiveSearch, range: NSMakeRange(0, l.length))
 			l = l.stringByReplacingOccurrencesOfString("GTD", withString: "Go to Definition", options: .CaseInsensitiveSearch, range: NSMakeRange(0, l.length))
 
-			if issueID > 0 {
+			if issueID != "0" {
 				return "* \(issueID): \(l)"
 			} else {
 				return "* \(l)"
@@ -195,15 +193,25 @@
 		return true
 	}
 
-	private func getIssueIDAndRemainderFromLine(_ line: String) -> (Int, String) {
-		var issueID = 0
+	private func getIssueIDAndRemainderFromLine(_ line: String) -> (String, String) {
+		var issueID: String? = nil
 		var l = line
 
 		let extractIssueID = { (range: NSRange) in
 			var potentialIssueID: NSString! = l.substringToIndex(range.location)
-			issueID = abs(potentialIssueID.intValue())
-			if issueID > 0 || potentialIssueID == "0" {
+			var number = abs(potentialIssueID.intValue())
+			if number > 0 || potentialIssueID == "0" {
+				issueID = potentialIssueID
 				l = l.substringFromIndex(range.location + 1).stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet)
+			} else {
+				var trimmedPotentialIssueID = potentialIssueID.substring(fromIndex: 1)
+				number = abs(trimmedPotentialIssueID.intValue())
+				if number > 0 {
+					issueID = potentialIssueID
+					l = l.substringFromIndex(range.location + 1).stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet)
+				} else {
+					issueID = nil
+				}
 			}
 		}
 
@@ -220,10 +228,12 @@
 			}
 		}
 		l = l.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet)
-		return (issueID, l)
+		return (coalesce(issueID, "0"), l) // E486 Parameter 1 is "String?", should be "T1", in call to Tuple!.New<T1,T2>(_ aItem1: T1, _ aItem2: T2) -> Tuple2<T1,T2>!
+		//return (issueID, l) // E486 Parameter 1 is "String?", should be "T1", in call to Tuple!.New<T1,T2>(_ aItem1: T1, _ aItem2: T2) -> Tuple2<T1,T2>!
+							// E486 Parameter 2 is "String", should be "T2", in call to Tuple!.New<T1,T2>(_ aItem1: T1, _ aItem2: T2) -> Tuple2<T1,T2>!
 	}
 
-	private func getIssueIDFromLine(_ line: String) -> Int {
+	private func getIssueIDFromLine(_ line: String) -> String {
 		let (issueID, _) = getIssueIDAndRemainderFromLine(line)
 		return issueID
 	}
@@ -255,7 +265,7 @@
 			}
 		}
 
-		var issueID = 0
+		var issueID: String
 		(issueID, l) = getIssueIDAndRemainderFromLine(l)
 
 		if issueID == 0 {
@@ -264,7 +274,7 @@
 			}
 		}
 
-		if issueID > 0 {
+		if issueID != "0" {
 			return "* \(issueID): \(l)"
 		} else {
 			return "* \(l)"
