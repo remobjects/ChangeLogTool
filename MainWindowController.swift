@@ -19,8 +19,13 @@
 		updatetextView()
 
 		if let lastFile = NSUserDefaults.standardUserDefaults.stringForKey(KEY_LAST_OPEN_FILE) {
-			textField.tryLoadFile(lastFile)
+			openFile(lastFile)
 		}
+	}
+
+	public func openFile(_ filename: String)
+	{
+		textField.tryLoadFile(filename)
 	}
 
 	private func updatetextView()

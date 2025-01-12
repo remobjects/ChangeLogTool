@@ -2,7 +2,7 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build" ToolsVersion="4.0">
   <PropertyGroup>
     <RootNamespace>ChangeLogTool</RootNamespace>
-    <ProjectGuid>2693C385-37AB-41CC-B6EF-E21DE42ACF63</ProjectGuid>
+    <ProjectGuid>{2693C385-37AB-41CC-B6EF-E21DE42ACF63}</ProjectGuid>
     <OutputType>executable</OutputType>
     <AssemblyName>ChangeLogTool</AssemblyName>
     <AllowGlobals>False</AllowGlobals>
@@ -46,16 +46,12 @@
     <Reference Include="rtl" />
     <Reference Include="libToffee" />
     <Reference Include="libSwift" />
+    <Reference Include="libElements" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppDelegate.swift" />
     <Compile Include="MainWindowController.swift" />
     <None Include="Resources\Entitlements.entitlements" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Resources\Info.plist" />
     <Content Include="Resources\App.icns" />
     <Xib Include="MainWindow.xib">
@@ -68,6 +64,9 @@
     <AppResource Include="Resources\47.png" />
     <AppResource Include="Resources\48.png" />
     <Compile Include="TextView.swift" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\RemObjects Software\Elements\RemObjects.Elements.Toffee.targets" />
 </Project>
