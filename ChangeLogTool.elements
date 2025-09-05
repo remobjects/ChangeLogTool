@@ -46,7 +46,10 @@
     <Reference Include="rtl" />
     <Reference Include="libToffee" />
     <Reference Include="libSwift" />
-    <Reference Include="libElements" />
+    <Reference Include="libElements">
+      <HintPath>..\RTL2\Bin\Toffee\macOS\libElements.fx</HintPath>
+    </Reference>
+    <Reference Include="libSilver" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppDelegate.swift" />

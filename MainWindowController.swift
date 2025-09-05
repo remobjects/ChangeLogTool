@@ -63,7 +63,7 @@
 				newLines.addObject(l2)
 			}
 		}
-		textField.string = newLines.componentsJoinedByString("\n")
+		setTextField(to: newLines)
 	}
 
 	func processLinesInBlocks(_ processor: (NSArray) -> NSArray) {
@@ -89,7 +89,7 @@
 				}
 			}
 			processCurrentBlock()
-			textField.string = newLines.componentsJoinedByString("\n")
+			setTextField(to: newLines)
 		}
 	}
 
@@ -102,6 +102,34 @@
 
 	@IBAction func gitToMarkdown(_ sender: AnyObject?) {
 		processLines(convertGitLineToMarkdown)
+		removeEmptySections(sender)
+	}
+
+	@IBAction func removeEmptySections(_ sender: AnyObject?) {
+		let lines = textField.string?.componentsSeparatedByString("\n")
+		let newLines = NSMutableArray()
+
+		var headline: String? = nil
+		var hasSpace: Boolean = false
+
+		for l in lines {
+			if l.hasPrefix("#") {
+				headline = l
+			} else if headline != nil && l == "" {
+				hasSpace = true
+			} else {
+				if let h = headline {
+					newLines.addObject(h)
+					headline = nil
+					if hasSpace {
+						newLines.addObject("")
+						hasSpace = false
+					}
+				}
+				newLines.addObject(l)
+			}
+		}
+		setTextField(to: newLines);
 	}
 
 	@IBAction func sortByID(_ sender: AnyObject?) {
@@ -159,7 +187,13 @@
 			} else {
 				let textA = self.getTextFromLine(a)
 				let textB = self.getTextFromLine(b)
-				return textA.lowercaseString.compare(textB.lowercaseString)
+				if !textA.hasPrefix("Merged") && textB.hasPrefix("Merged") {
+					return .OrderedAscending
+				} else if textA.hasPrefix("Merged") && !textB.hasPrefix("Merged") {
+					return .OrderedDescending
+				} else {
+					return textA.lowercaseString.compare(textB.lowercaseString)
+				}
 			}
 		}
 	}
@@ -171,7 +205,13 @@
 			let textA = self.getTextFromLine(a)
 			let textB = self.getTextFromLine(b)
 			if (idA == 0) == (idB == 0) {
-				return textA.lowercaseString.compare(textB.lowercaseString)
+				if !textA.hasPrefix("Merged") && textB.hasPrefix("Merged") {
+					return .OrderedAscending
+				} else if textA.hasPrefix("Merged") && !textB.hasPrefix("Merged") {
+					return .OrderedDescending
+				} else {
+					return textA.lowercaseString.compare(textB.lowercaseString)
+				}
 			} else if idA == 0 {
 				return .OrderedDescending
 			} else {
@@ -285,4 +325,32 @@
 			return "* \(l)"
 		}
 	}
+
+	func setTextField(to newText: NSArray<String>) {
+		//let oldText = textField.string
+
+		//if let lUndoManager = textField.undoManager {
+			//// Prepare the undo invocation target
+			////let lUndoTarget = lUndoManager.prepare(invocationTarget: textField) as! NSTextView
+			////lUndoTarget.string = oldText
+			//lUndoManager.registerUndo(target: self, selector: #selector(restoreText(_:)), object: oldText)
+			//lUndoManager.setActionName("Change Text")
+		//}
+
+		// Replace the text in the editor, which updates the NSTextField and the undo stack
+		textField.string = newText.componentsJoinedByString("\n")
+	}
+
+	//@objc
+	//func restoreText(_ oldText: String) {
+		//let currentText = textField.string
+
+		//if let lUndoManager = textField.undoManager {
+			//lUndoManager.registerUndo(target: self, selector: #selector(restoreText(_:)), object: currentText)
+			//lUndoManager.setActionName("Change Text")
+		//}
+
+		//textField.string = oldText
+	//}
+
 }
